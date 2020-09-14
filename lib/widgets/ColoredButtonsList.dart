@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColoredButtonsList extends StatefulWidget {
-  final List<Map<String, dynamic>> buttonsList;
+  final List<ColoredButtonsListButton> buttonsList;
 
   ColoredButtonsList(this.buttonsList);
 
@@ -18,9 +18,9 @@ class _ColoredButtonsListState extends State<ColoredButtonsList> {
       itemBuilder: (context, index) {
         return ColoredButtonsListButton(
           color: ColoredButtonListColors.nextColor(),
-          icon: widget.buttonsList[index]['icon'],
-          onTap: () => Navigator.of(context).pushNamed(widget.buttonsList[index]['route']),
-          text: widget.buttonsList[index]['text'],
+          icon: widget.buttonsList[index].icon,
+          onTap: widget.buttonsList[index].onTap,
+          text: widget.buttonsList[index].text,
         );
       }
     );
@@ -44,7 +44,7 @@ class ColoredButtonsListButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         alignment: Alignment.centerLeft,
         height: 120.0,
-        color: this.color,
+        color: this.color ?? ColoredButtonListColors.nextColor(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

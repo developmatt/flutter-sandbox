@@ -8,59 +8,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  List<Map<String, dynamic>> buttonsList = [
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-    {
-      'text': 'Conteúdo do botão 1',
-      'icon': Icons.verified_user,
-      'route': '/'
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+
+    List<Map<String, dynamic>> buttonsList = [
+      {
+        'text': 'Listando os contatos',
+        'icon': Icons.account_circle,
+        'onTap': () => Navigator.of(context).pushNamed('/')
+      }
+    ];
+
     return Scaffold(
       appBar: AppBar(title: Text('Home Screen')),
-      body: ColoredButtonsList(buttonsList),
+      body: ColoredButtonsList(buttonsList.map((buttonItem) => ColoredButtonsListButton(
+        onTap: buttonItem['onTap'],
+        icon: Icons.account_circle,
+        text: buttonItem['text'],
+      )).toList()),
     );
   }
 }
