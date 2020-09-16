@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterSandbox/screens/contacts/ContactsScreen.dart';
-import 'package:flutterSandbox/screens/home/HomeScreen.dart';
+import 'package:flutterSandbox/screens/ContactsScreen.dart';
+import 'package:flutterSandbox/screens/HomeScreen.dart';
 
 void main() {
   runApp(MyApp());

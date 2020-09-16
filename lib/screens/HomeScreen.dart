@@ -11,13 +11,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    List<Map<String, dynamic>> buttonsList = [
-      {
+    List<Map<String, dynamic>> buttonsList = [{
         'text': 'Listando os contatos',
         'icon': Icons.account_circle,
-        'onTap': () => Navigator.of(context).pushNamed('/')
-      }
-    ];
+        'onTap': () => Navigator.of(context).pushNamed('contacts')
+    }];
 
     return Scaffold(
       appBar: AppBar(title: Text('Home Screen')),

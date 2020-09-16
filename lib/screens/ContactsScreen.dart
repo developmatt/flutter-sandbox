@@ -8,8 +8,11 @@ class ContactsScreen extends StatefulWidget {
 class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Tela de contato"),
+    
+    return SafeArea(
+      child: Scaffold(
+        body: Text('Contatos'),
+      ),
     );
   }
 }
