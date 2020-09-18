@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutterSandbox">
+    package="com.developmatt.flutterSandbox">
     
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
