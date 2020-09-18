@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterSandbox/screens/ContactsScreen.dart';
 import 'package:flutterSandbox/screens/HomeScreen.dart';
+import 'package:flutterSandbox/screens/SmsAuthenticationScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomeScreen(),
         'contacts': (context) => ContactsScreen(),
+        'sms_authentication': (context) => SmsAuthenticationScreen()
       },
       theme: ThemeData(
         // This is the theme of your application.
