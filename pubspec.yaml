@@ -30,6 +30,7 @@ dependencies:
   firebase_auth: ^0.18.0+1
   intl_phone_number_input: ^0.5.1
   flutter_masked_text: ^0.8.0
+  pin_code_fields: ^5.1.0
 
 dev_dependencies:
   flutter_test:

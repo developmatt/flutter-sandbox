@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
 
 class SmsAuthenticationScreen extends StatefulWidget {
   @override
@@ -14,9 +16,14 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
 
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   PhoneNumber _internationalPhoneNumberInput = PhoneNumber(isoCode: 'BR');
-  final TextEditingController _internationalPhoneNumberInputController = new MaskedTextController(mask: '(00) 00000-0000');
+  final TextEditingController _internationalPhoneNumberInputController = TextEditingController();
+  final TextEditingController _smsCodeInputController = new TextEditingController();
   String _fullNumber = '';
   bool _smsCodeSent = false;
+  bool _confirmSmsCodeButtonActive = false;
+
+  String _verificationId;
+  int _resendToken;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,7 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
       body: SafeArea(
         child: !_smsCodeSent
         ? _getSendSmsScreen()
-        : _getInsertSmsCodeScreen(),
+        : _getInsertSmsCodeScreen(context),
       ),
     );
   }
@@ -64,18 +71,47 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
     );
   }
 
-  Widget _getInsertSmsCodeScreen() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('O código foi enviado para o número:'),
-          Text(_fullNumber, style: TextStyle(
-           fontSize: 18.0,
-           fontWeight: FontWeight.bold,
-           height: 2,
-          ))
-        ],
+  Widget _getInsertSmsCodeScreen(context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('O código foi enviado para o número:'),
+            Text(
+              _fullNumber,
+              style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              height: 2,
+            )),
+            Container(
+              margin: EdgeInsets.only(top: 50.0, bottom: 20.0),
+              child: PinCodeTextField(
+                controller: _smsCodeInputController,
+                keyboardType: TextInputType.number,
+                appContext: context,
+                length: 6,
+                onChanged: (value) => setState(() {
+                  _confirmSmsCodeButtonActive = value.length > 5;
+                }),
+                backgroundColor: Colors.transparent,
+                pinTheme: PinTheme(
+                  inactiveColor: Color(0x330088FF),
+                  activeColor: Color(0xFF0088FF)
+                ),
+              ),
+            ),
+            CupertinoButton.filled(
+              disabledColor: Color(0x330088FF),
+              child: Text('Confirmar código'),
+              onPressed: _confirmSmsCodeButtonActive
+              ? _confirmCodeButtonHandler:
+              null,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -102,6 +138,7 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
         setState(() {
           _smsCodeSent = true;
         });
+        _smsCodeSentHandler(verificationId, resendToken);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -132,6 +169,33 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
     final regExp = RegExp(pattern);
 
     return (_fullNumber != null && !_fullNumber.isEmpty && _fullNumber.length > 13 && regExp.hasMatch(_fullNumber));
+  }
+
+  void _smsCodeSentHandler(String verificationId, int resendToken) {
+    _verificationId = verificationId;
+    _resendToken = resendToken;
+  }
+
+  void _confirmCodeButtonHandler() async {
+    print(_verificationId);
+    print(_resendToken);
+
+    // Update the UI - wait for the user to enter the SMS code
+    String smsCode = _smsCodeInputController.text;
+
+    // Create a PhoneAuthCredential with the code
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(verificationId: _verificationId, smsCode: smsCode);
+
+    UserCredential credential;
+
+    try {
+      // Sign the user in (or link) with the credential
+      credential = await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      print(credential);
+    } catch(e) {
+      print("Erro ao tentar fazer login");
+      print(e.toString());
+    }
   }
 
   @override
