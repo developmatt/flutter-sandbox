@@ -51,6 +51,7 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: InternationalPhoneNumberInput(
+                      maxLength: 13,
                       onInputChanged: (value) => _fullNumber = value.toString(),
                       ignoreBlank: false,
                       autoValidate: false,
@@ -124,7 +125,15 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: _fullNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        UserCredential _credential;
+        try {
+          _credential = await FirebaseAuth.instance.signInWithCredential(credential);
+          print(">>>>>>>>>>>> Login executado com sucesso");
+          print(_credential);
+        } catch(e) {
+          print(e.toString());
+          _showErrorMessage('Não foi possível autenticar automaticamente. Digite o código de 6 dígitos enviado via SMS para o número informado');
+        }
       },
       verificationFailed: (FirebaseAuthException e) {
         String _errorMessage = 'Não foi possível enviar o código';
@@ -195,6 +204,7 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
     } catch(e) {
       print("Erro ao tentar fazer login");
       print(e.toString());
+      _showErrorMessage('Código inválido ou expirado', 'Erro ao autenticar');
     }
   }
 
