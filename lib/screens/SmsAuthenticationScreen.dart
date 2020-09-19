@@ -81,6 +81,9 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
   }
 
   Future<void> _sendCodeToNumber() async {
+    if(!_isPhoneNumberValid()) {
+      return _showErrorMessage('O número de telefone é inválido', 'Verifique os dados');
+    }
 
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: _fullNumber,
@@ -122,6 +125,13 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
         ],
       )
     );
+  }
+
+  bool _isPhoneNumberValid() {
+    final pattern = r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$';
+    final regExp = RegExp(pattern);
+
+    return (_fullNumber != null && !_fullNumber.isEmpty && _fullNumber.length > 13 && regExp.hasMatch(_fullNumber));
   }
 
   @override
