@@ -28,6 +28,8 @@ dependencies:
   contacts_service: ^0.3.10
   firebase_core: "0.5.0"
   firebase_auth: ^0.18.0+1
+  intl_phone_number_input: ^0.5.1
+  flutter_masked_text: ^0.8.0
 
 dev_dependencies:
   flutter_test:
