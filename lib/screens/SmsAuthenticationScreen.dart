@@ -200,6 +200,7 @@ class _SmsAuthenticationScreenState extends State<SmsAuthenticationScreen> {
     try {
       // Sign the user in (or link) with the credential
       credential = await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+      print("Login efetuado com sucesso");
       print(credential);
     } catch(e) {
       print("Erro ao tentar fazer login");
